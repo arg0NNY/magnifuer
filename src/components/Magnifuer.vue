@@ -95,8 +95,6 @@
       </div>
     </Transition>
   </Teleport>
-
-  <pre>{{ magnifier }}</pre>
 </template>
 
 <script setup lang="ts">
@@ -491,6 +489,8 @@ const magnifier = reactive({
   containerSize,
   areaSize: magnifierAreaSize
 }) satisfies Reactive<MagnifuerState>
+
+defineExpose({ state: magnifier })
 </script>
 
 <style scoped lang="scss">

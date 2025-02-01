@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Magnifuer from './components/Magnifuer.vue'
+
+const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
 </script>
 
 <template>
+  <pre>{{ magnifuerRef?.state }}</pre>
   <main>
     <Magnifuer
+      ref="magnifuerRef"
       magnifier-class="magnifier"
       :scale="3"
       controllable
