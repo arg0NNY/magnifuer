@@ -111,15 +111,7 @@ import {
 import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import px from '@/utils/px'
-
-export interface MagnifuerPosition<T = number> {
-  x: T
-  y: T
-}
-export interface MagnifuerSize<T = number> {
-  width: T
-  height: T
-}
+import { MagnifuerPosition, MagnifuerSize, MagnifuerState } from '@/types'
 
 export interface MagnifuerImgSrc {
   /**
@@ -165,24 +157,6 @@ export interface MagnifuerControllableOptions {
 export interface MagnifuerOffset {
   x: number | string
   y: number | string
-}
-
-export interface MagnifuerPointer extends MagnifuerPosition {
-  absolute: MagnifuerPosition
-  isOutside: boolean
-}
-export interface MagnifuerState extends MagnifuerPosition {
-  active: boolean
-  scale: number
-  x: number
-  y: number
-  absolute: MagnifuerPosition
-  pointer: MagnifuerPointer
-  anchor: MagnifuerPosition & MagnifuerSize
-  offset?: MagnifuerPosition<string>
-  size: MagnifuerSize
-  containerSize: MagnifuerSize
-  areaSize: MagnifuerSize
 }
 
 export interface MagnifuerProps {
