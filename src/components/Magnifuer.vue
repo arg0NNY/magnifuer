@@ -151,11 +151,17 @@ export interface MagnifuerControllableOptions {
    */
   max?: number
   /**
+   * Speed for the default scale step function
+   *
+   * @default 1.3
+   */
+  speed?: number
+  /**
    * Step for scale value
    *
-   * @default 0.5
+   * @default (current, direction) => current * Math.pow(speed, direction)
    */
-  step?: number | ((step: number, scale: number) => number)
+  step?: number | ((current: number, direction: number) => number)
 }
 
 export interface MagnifuerOffset {
@@ -282,7 +288,8 @@ function alterScale (value: number): void {
   const {
     min = 1,
     max = 10,
-    step = 0.5
+    speed = 1.3,
+    step = (current: number, direction: number) => current * Math.pow(speed, direction)
   } = typeof props.controllable === 'object' ? props.controllable : {}
 
   scale.value = Math.max(
@@ -290,11 +297,9 @@ function alterScale (value: number): void {
     min,
     Math.min(
       max,
-      scale.value + (
-        typeof step === 'function'
-          ? step(value, scale.value)
-          : (value * step)
-      )
+      typeof step === 'function'
+        ? step(scale.value, value)
+        : (scale.value + value * step)
     )
   )
 }
