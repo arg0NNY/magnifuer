@@ -6,7 +6,7 @@ const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
 </script>
 
 <template>
-  <pre>{{ magnifuerRef?.state }}</pre>
+  <pre v-if="false">{{ magnifuerRef?.state }}</pre>
   <main>
     <Magnifuer
       ref="magnifuerRef"
@@ -32,7 +32,7 @@ main {
 }
 
 .magnifier {
-  border: 2px solid #000;
+  box-shadow: 0 0 0 2px #000;
 }
 
 .fade-enter-active,

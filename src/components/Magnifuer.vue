@@ -7,7 +7,7 @@
     v-bind="$attrs"
   >
     <slot
-      :state="magnifier"
+      :state="state"
       :is-magnifier="false"
     >
       <img
@@ -18,20 +18,20 @@
     </slot>
 
     <div
-      v-if="area && magnifier.active"
+      v-if="area && state.active"
       class="magnifuer__area-container"
       :style="{
-        width: px(magnifierAreaSize.width),
-        height: px(magnifierAreaSize.height),
+        width: px(state.areaSize.width),
+        height: px(state.areaSize.height),
         transform: [
           `translate(-50%, -50%)`,
-          `translate(${magnifierContainerPosition.x}px, ${magnifierContainerPosition.y}px)`
+          `translate(${state.absolute.x}px, ${state.absolute.y}px)`
         ].join(' ')
       }"
     >
       <slot
         name="area"
-        :state="magnifier"
+        :state="state"
       >
         <div
           class="magnifuer__area"
@@ -51,14 +51,14 @@
       v-bind="typeof transition === 'object' ? transition : {}"
     >
       <div
-        v-if="magnifier.active"
+        v-if="state.active"
         ref="magnifierRef"
         class="magnifuer__magnifier"
         :class="magnifierClass"
         :style="{
           ...magnifierStyles,
-          width: px(computedSize.width),
-          height: px(computedSize.height),
+          width: px(state.size.width),
+          height: px(state.size.height),
           zIndex,
           borderRadius
         }"
@@ -68,20 +68,20 @@
           class="magnifuer__content"
           :class="contentClass"
           :style="{
-          width: px(containerSize.width),
-          height: px(containerSize.height),
+          width: px(state.containerSize.width),
+          height: px(state.containerSize.height),
           transform: [
             `scale(${scale})`,
-            `translate(${-magnifier.x * 100}%, ${-magnifier.y * 100}%)`
+            `translate(${-state.x * 100}%, ${-state.y * 100}%)`
           ].join(' ')
         }"
         >
           <slot
             name="magnifier"
-            :state="magnifier"
+            :state="state"
           >
             <slot
-              :state="magnifier"
+              :state="state"
               :is-magnifier="true"
             >
               <img
@@ -98,141 +98,13 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  type CSSProperties,
-  type HTMLAttributes,
-  type ImgHTMLAttributes,
-  type Reactive,
-  reactive,
-  ref,
-  type TransitionProps
-} from 'vue'
+import { computed, reactive, ref, } from 'vue'
 import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
+import type { MagnifuerPosition } from '@/types'
+import type { MagnifuerProps, MagnifuerSlots, MagnifuerState } from '@/types/component'
+import useMagnifuer from '@/composables/useMagnifuer'
 import px from '@/utils/px'
-import { MagnifuerPosition, MagnifuerSize, MagnifuerState } from '@/types'
-
-export interface MagnifuerImgSrc {
-  /**
-   * Image source for the default slot
-   */
-  default: string
-  /**
-   * Image source for the magnifier slot
-   */
-  magnifier: string
-}
-export interface MagnifuerImg extends Omit<ImgHTMLAttributes, 'src'> {
-  src: string | MagnifuerImgSrc
-}
-
-export interface MagnifuerControllableOptions {
-  /**
-   * Minimal scale value
-   *
-   * @default 1
-   */
-  min?: number
-  /**
-   * Maximal scale value
-   *
-   * @default 10
-   */
-  max?: number
-  /**
-   * Speed for the default scale step function
-   *
-   * @default 1.3
-   */
-  speed?: number
-  /**
-   * Step for scale value
-   *
-   * @default (current, direction) => current * Math.pow(speed, direction)
-   */
-  step?: number | ((current: number, direction: number) => number)
-}
-
-export interface MagnifuerOffset {
-  x: number | string
-  y: number | string
-}
-
-export interface MagnifuerProps {
-  /**
-   * Allow user to control magnifier scale using the mouse wheel
-   *
-   * @default false
-   */
-  controllable?: boolean | MagnifuerControllableOptions
-  /**
-   * Use images for default and magnifier slots
-   */
-  img?: MagnifuerImg
-  /**
-   * Anchor for the magnifier
-   *
-   * @default 'self'
-   */
-  anchor?: 'self' | 'pointer' | HTMLElement
-  /**
-   * Position of the magnifier
-   *
-   * - `'anchor'` - set position equal to the anchor position
-   * - `{ x: number, y: number }` - set position to absolute coordinates
-   * - `UseFloatingOptions<HTMLElement>` - use [Floating UI](https://floating-ui.com/docs/vue#options) for positioning
-   *
-   * @default 'anchor'
-   */
-  position?: 'anchor' | MagnifuerPosition | UseFloatingOptions<HTMLElement>
-  transform?: boolean
-  offset?: number | string | MagnifuerOffset
-  /**
-   * Size of the magnifier
-   *
-   * - `'anchor'` - set size equal to the anchor size
-   * - `number` - set width and height to the same value
-   * - `{ width: number, height: number }` - set width and height to absolute values
-   *
-   * @default 'anchor'
-   */
-  size?: 'anchor' | number | MagnifuerSize
-  /**
-   * Element for the magnifier to be teleported to, `false` to disable the teleport
-   *
-   * @default 'body'
-   * @see https://vuejs.org/guide/built-ins/teleport.html
-   */
-  teleport?: string | HTMLElement | false
-  transition?: string | TransitionProps
-  /**
-   * Z-index for the magnifier
-   *
-   * @default 1000
-   */
-  zIndex?: number
-  /**
-   * Disable the magnifier
-   *
-   * @default false
-   */
-  disabled?: boolean
-  cursor?: CSSProperties['cursor']
-  borderRadius?: string | number
-  allowOverflow?: boolean
-  area?: boolean
-  areaClass?: HTMLAttributes['class']
-  magnifierClass?: HTMLAttributes['class']
-  contentClass?: HTMLAttributes['class']
-}
-
-export type MagnifuerBaseSlot = (props: { state: MagnifuerState }) => any
-export interface MagnifuerSlots {
-  default?: (props: { state: MagnifuerState, isMagnifier: boolean }) => any
-  magnifier?: MagnifuerBaseSlot
-  area?: MagnifuerBaseSlot
-}
 
 const props = withDefaults(
   defineProps<MagnifuerProps>(),
@@ -284,33 +156,29 @@ function onWheel (event: WheelEvent): void {
 }
 
 const containerRef = ref<HTMLElement>()
-const {
-  elementX: pointerX,
-  elementY: pointerY,
-  x: pointerAbsoluteX,
-  y: pointerAbsoluteY,
-  elementWidth: containerWidth,
-  elementHeight: containerHeight,
-  isOutside: isPointerOutside
-} = useMouseInElement(containerRef)
-const pointer = reactive({
-  x: pointerX,
-  y: pointerY,
-  absolute: {
-    x: pointerAbsoluteX,
-    y: pointerAbsoluteY
-  },
-  isOutside: isPointerOutside
-})
-const containerSize = reactive({
-  width: containerWidth,
-  height: containerHeight
-})
-
 const magnifierRef = ref<HTMLElement>()
 
+const computedAnchor = computed(() => {
+  if (props.anchor instanceof HTMLElement) return props.anchor
+  return containerRef.value
+})
+const {
+  x: pointerX,
+  y: pointerY,
+  elementPositionX: anchorX,
+  elementPositionY: anchorY,
+  elementWidth: anchorWidth,
+  elementHeight: anchorHeight
+} = useMouseInElement(computedAnchor)
+const anchor = reactive({
+  x: computed(() => props.anchor === 'pointer' ? pointerX.value : anchorX.value),
+  y: computed(() => props.anchor === 'pointer' ? pointerY.value : anchorY.value),
+  width: computed(() => props.anchor === 'pointer' ? 0 : anchorWidth.value),
+  height: computed(() => props.anchor === 'pointer' ? 0 : anchorHeight.value)
+})
+
 function getSrc (magnifier: boolean = false): string | undefined {
-  if (props.img == null) return
+  if (!props.img) return
 
   return typeof props.img.src === 'string'
     ? props.img.src
@@ -319,27 +187,6 @@ function getSrc (magnifier: boolean = false): string | undefined {
 const computedSrc = reactive({
   default: computed(() => getSrc()),
   magnifier: computed(() => getSrc(true))
-})
-
-const computedAnchor = computed(() => {
-  if (props.anchor instanceof HTMLElement) return props.anchor
-  return containerRef.value
-})
-const {
-  elementPositionX: anchorX,
-  elementPositionY: anchorY,
-  elementWidth: anchorWidth,
-  elementHeight: anchorHeight
-} = useMouseInElement(computedAnchor)
-const anchor = reactive({
-  x: computed(() => {
-    if (props.anchor === 'pointer') return pointer.absolute.x
-    return anchorX.value
-  }),
-  y: computed(() => {
-    if (props.anchor === 'pointer') return pointer.absolute.y
-    return anchorY.value
-  })
 })
 
 const computedOffset = computed(() => {
@@ -400,71 +247,32 @@ const magnifierStyles = computed(() => {
   }
 })
 
-const computedSize = reactive({
-  width: computed(() => {
-    if (props.size === 'anchor') return anchorWidth.value
-    if (typeof props.size === 'number') return props.size
-    return props.size.width
-  }),
-  height: computed(() => {
-    if (props.size === 'anchor') return anchorHeight.value
-    if (typeof props.size === 'number') return props.size
-    return props.size.height
-  })
-})
-
-const magnifierAreaSize = reactive({
-  width: computed(() => computedSize.width / scale.value),
-  height: computed(() => computedSize.height / scale.value)
-})
-
-const magnifierContainerPosition = reactive({
-  x: computed(
-    () => {
-      if (props.allowOverflow) return pointer.x
-      return Math.max(
-        magnifierAreaSize.width / 2,
-        Math.min(
-          containerWidth.value - magnifierAreaSize.width / 2,
-          pointer.x
-        )
-      )
-    }
-  ),
-  y: computed(
-    () => {
-      if (props.allowOverflow) return pointer.y
-      return Math.max(
-        magnifierAreaSize.height / 2,
-        Math.min(
-          containerHeight.value - magnifierAreaSize.height / 2,
-          pointer.y
-        )
-      )
-    }
-  )
-})
-
-const magnifier = reactive({
-  active: computed(() => !props.disabled && !pointer.isOutside),
+const magnifuer = useMagnifuer(
+  containerRef,
   scale,
-  x: computed(() => magnifierContainerPosition.x / containerWidth.value),
-  y: computed(() => magnifierContainerPosition.y / containerHeight.value),
-  absolute: magnifierContainerPosition,
-  pointer,
-  anchor: {
-    x: computed(() => anchor.x),
-    y: computed(() => anchor.y),
-    width: computed(() => props.anchor === 'pointer' ? 0 : anchorWidth.value),
-    height: computed(() => props.anchor === 'pointer' ? 0 : anchorHeight.value)
+  {
+    width: computed(() => {
+      if (props.size === 'anchor') return anchorWidth.value
+      if (typeof props.size === 'number') return props.size
+      return props.size.width
+    }),
+    height: computed(() => {
+      if (props.size === 'anchor') return anchorHeight.value
+      if (typeof props.size === 'number') return props.size
+      return props.size.height
+    })
   },
-  offset: computedOffset,
-  size: computedSize,
-  containerSize,
-  areaSize: magnifierAreaSize
-}) satisfies Reactive<MagnifuerState>
+  { allowOverflow: () => props.allowOverflow }
+)
 
-defineExpose({ state: magnifier })
+const state = computed<MagnifuerState>(() => ({
+  ...magnifuer,
+  active: !props.disabled && !magnifuer.pointer.isOutside,
+  anchor,
+  offset: computedOffset.value
+}))
+
+defineExpose({ state })
 </script>
 
 <style scoped lang="scss">
