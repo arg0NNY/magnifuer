@@ -155,7 +155,7 @@ export interface MagnifuerControllableOptions {
    *
    * @default 0.5
    */
-  step?: number
+  step?: number | ((step: number, scale: number) => number)
 }
 
 export interface MagnifuerOffset {
@@ -285,7 +285,18 @@ function alterScale (value: number): void {
     step = 0.5
   } = typeof props.controllable === 'object' ? props.controllable : {}
 
-  scale.value = Math.max(1, min, Math.min(max, scale.value + value * step))
+  scale.value = Math.max(
+    1,
+    min,
+    Math.min(
+      max,
+      scale.value + (
+        typeof step === 'function'
+          ? step(value, scale.value)
+          : (value * step)
+      )
+    )
+  )
 }
 function onWheel (event: WheelEvent): void {
   if (props.controllable === false || props.disabled) return
