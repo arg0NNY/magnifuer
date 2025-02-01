@@ -5,7 +5,9 @@ import Magnifuer from './components/Magnifuer.vue'
 <template>
   <main>
     <Magnifuer
+      magnifier-class="magnifier"
       :scale="3"
+      controllable
       :img="{
         src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
         width: 500
@@ -21,5 +23,9 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+:global(.magnifier) {
+  border: 2px solid #000;
 }
 </style>

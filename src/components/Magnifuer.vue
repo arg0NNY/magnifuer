@@ -3,6 +3,7 @@
     ref="containerRef"
     class="magnifuer"
     @wheel="onWheel"
+    v-bind="$attrs"
   >
     <slot :size="containerSize">
       <img
@@ -28,7 +29,10 @@
         name="area"
         :size="magnifierAreaSize"
       >
-        <div class="magnifuer__area" />
+        <div
+          class="magnifuer__area"
+          :class="areaClass"
+        />
       </slot>
     </div>
   </div>
@@ -41,6 +45,7 @@
       v-if="magnifier.active"
       ref="magnifierRef"
       class="magnifuer__magnifier"
+      :class="magnifierClass"
       :style="{
         ...magnifierStyles,
         width: px(computedSize.width),
@@ -51,6 +56,7 @@
       <div
         ref="contentRef"
         class="magnifuer__content"
+        :class="contentClass"
         :style="{
           width: px(containerSize.width),
           height: px(containerSize.height),
@@ -78,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type ImgHTMLAttributes, reactive, ref } from 'vue'
+import { computed, type HTMLAttributes, type ImgHTMLAttributes, reactive, ref } from 'vue'
 import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import px from '@/utils/px'
@@ -192,6 +198,9 @@ export interface MagnifuerProps {
   disabled?: boolean
   allowOverflow?: boolean
   area?: boolean
+  areaClass?: HTMLAttributes['class']
+  magnifierClass?: HTMLAttributes['class']
+  contentClass?: HTMLAttributes['class']
 }
 
 export interface MagnifuerSlots {
