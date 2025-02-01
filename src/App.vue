@@ -10,10 +10,7 @@ import Magnifuer from './components/Magnifuer.vue'
         src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
         width: 500
       }"
-      anchor="pointer"
-      offset="-50%"
-      :size="200"
-      allow-overflow
+      :position="{ placement: 'right' }"
     />
   </main>
 </template>

@@ -13,7 +13,7 @@
     </slot>
 
     <div
-      v-if="magnifier.active"
+      v-if="area && magnifier.active"
       class="magnifuer__area-container"
       :style="{
         width: px(magnifierAreaSize.width),
@@ -191,6 +191,7 @@ export interface MagnifuerProps {
    */
   disabled?: boolean
   allowOverflow?: boolean
+  area?: boolean
 }
 
 export interface MagnifuerSlots {
@@ -212,7 +213,8 @@ const props = withDefaults(
     teleport: 'body',
     zIndex: 1000,
     disabled: false,
-    allowOverflow: false
+    allowOverflow: false,
+    area: true
   }
 )
 defineSlots<MagnifuerSlots>()
