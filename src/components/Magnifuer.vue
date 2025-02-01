@@ -2,6 +2,7 @@
   <div
     ref="containerRef"
     class="magnifuer"
+    :style="{ cursor }"
     @wheel="onWheel"
     v-bind="$attrs"
   >
@@ -89,7 +90,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type HTMLAttributes, type ImgHTMLAttributes, reactive, ref, type TransitionProps } from 'vue'
+import {
+  computed,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ImgHTMLAttributes,
+  reactive,
+  ref,
+  type TransitionProps
+} from 'vue'
 import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import px from '@/utils/px'
@@ -202,6 +211,7 @@ export interface MagnifuerProps {
    * @default false
    */
   disabled?: boolean
+  cursor?: CSSProperties['cursor']
   allowOverflow?: boolean
   area?: boolean
   areaClass?: HTMLAttributes['class']
