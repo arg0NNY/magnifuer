@@ -190,6 +190,7 @@ export interface MagnifuerProps {
    * @default false
    */
   disabled?: boolean
+  allowOverflow?: boolean
 }
 
 export interface MagnifuerSlots {
@@ -210,7 +211,8 @@ const props = withDefaults(
     size: 'anchor',
     teleport: 'body',
     zIndex: 1000,
-    disabled: false
+    disabled: false,
+    allowOverflow: false
   }
 )
 defineSlots<MagnifuerSlots>()
@@ -372,22 +374,28 @@ const magnifierAreaSize = reactive({
 
 const magnifierContainerPosition = reactive({
   x: computed(
-    () => Math.max(
-      magnifierAreaSize.width / 2,
-      Math.min(
-        containerWidth.value - magnifierAreaSize.width / 2,
-        pointer.x
+    () => {
+      if (props.allowOverflow) return pointer.x
+      return Math.max(
+        magnifierAreaSize.width / 2,
+        Math.min(
+          containerWidth.value - magnifierAreaSize.width / 2,
+          pointer.x
+        )
       )
-    )
+    }
   ),
   y: computed(
-    () => Math.max(
-      magnifierAreaSize.height / 2,
-      Math.min(
-        containerHeight.value - magnifierAreaSize.height / 2,
-        pointer.y
+    () => {
+      if (props.allowOverflow) return pointer.y
+      return Math.max(
+        magnifierAreaSize.height / 2,
+        Math.min(
+          containerHeight.value - magnifierAreaSize.height / 2,
+          pointer.y
+        )
       )
-    )
+    }
   )
 })
 

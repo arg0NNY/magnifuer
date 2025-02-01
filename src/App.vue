@@ -12,11 +12,17 @@ import Magnifuer from './components/Magnifuer.vue'
       }"
       anchor="pointer"
       offset="-50%"
-      :size="100"
+      :size="200"
+      allow-overflow
     />
   </main>
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
+main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
