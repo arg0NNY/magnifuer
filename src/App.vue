@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import Magnifuer from './components/Magnifuer.vue'
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <main>
+    <Magnifuer
+      :scale="3"
+      :img="{
+        src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
+        width: 500
+      }"
+    />
+  </main>
 </template>
 
 <style scoped>
