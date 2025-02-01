@@ -6,7 +6,10 @@
     @wheel="onWheel"
     v-bind="$attrs"
   >
-    <slot :size="containerSize">
+    <slot
+      :state="magnifier"
+      :is-magnifier="false"
+    >
       <img
         v-if="img"
         v-bind="img"
@@ -28,7 +31,7 @@
     >
       <slot
         name="area"
-        :size="magnifierAreaSize"
+        :state="magnifier"
       >
         <div
           class="magnifuer__area"
@@ -75,9 +78,12 @@
         >
           <slot
             name="magnifier"
-            :size="containerSize"
+            :state="magnifier"
           >
-            <slot :size="containerSize">
+            <slot
+              :state="magnifier"
+              :is-magnifier="true"
+            >
               <img
                 v-if="img"
                 v-bind="img"
@@ -89,6 +95,8 @@
       </div>
     </Transition>
   </Teleport>
+
+  <pre>{{ magnifier }}</pre>
 </template>
 
 <script setup lang="ts">
@@ -97,6 +105,7 @@ import {
   type CSSProperties,
   type HTMLAttributes,
   type ImgHTMLAttributes,
+  type Reactive,
   reactive,
   ref,
   type TransitionProps
@@ -105,13 +114,13 @@ import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import px from '@/utils/px'
 
-export interface MagnifuerPosition {
-  x: number
-  y: number
+export interface MagnifuerPosition<T = number> {
+  x: T
+  y: T
 }
-export interface MagnifuerSize {
-  width: number
-  height: number
+export interface MagnifuerSize<T = number> {
+  width: T
+  height: T
 }
 
 export interface MagnifuerImgSrc {
@@ -152,6 +161,24 @@ export interface MagnifuerControllableOptions {
 export interface MagnifuerOffset {
   x: number | string
   y: number | string
+}
+
+export interface MagnifuerPointer extends MagnifuerPosition {
+  absolute: MagnifuerPosition
+  isOutside: boolean
+}
+export interface MagnifuerState extends MagnifuerPosition {
+  active: boolean
+  scale: number
+  x: number
+  y: number
+  absolute: MagnifuerPosition
+  pointer: MagnifuerPointer
+  anchor: MagnifuerPosition & MagnifuerSize
+  offset?: MagnifuerPosition<string>
+  size: MagnifuerSize
+  containerSize: MagnifuerSize
+  areaSize: MagnifuerSize
 }
 
 export interface MagnifuerProps {
@@ -222,10 +249,11 @@ export interface MagnifuerProps {
   contentClass?: HTMLAttributes['class']
 }
 
+export type MagnifuerBaseSlot = (props: { state: MagnifuerState }) => any
 export interface MagnifuerSlots {
-  default?: (props: { size: MagnifuerSize }) => any
-  magnifier?: (props: { size: MagnifuerSize }) => any
-  area?: (props: { size: MagnifuerSize }) => any
+  default?: (props: { state: MagnifuerState, isMagnifier: boolean }) => any
+  magnifier?: MagnifuerBaseSlot
+  area?: MagnifuerBaseSlot
 }
 
 const props = withDefaults(
@@ -338,7 +366,7 @@ const computedOffset = computed(() => {
   }
 })
 
-const computedPosition = computed(() => {
+const computedPosition = computed<MagnifuerPosition | UseFloatingOptions<HTMLElement>>(() => {
   if (props.position === 'anchor') return anchor
   return props.position
 })
@@ -431,9 +459,22 @@ const magnifierContainerPosition = reactive({
 
 const magnifier = reactive({
   active: computed(() => !props.disabled && !pointer.isOutside),
+  scale,
   x: computed(() => magnifierContainerPosition.x / containerWidth.value),
-  y: computed(() => magnifierContainerPosition.y / containerHeight.value)
-})
+  y: computed(() => magnifierContainerPosition.y / containerHeight.value),
+  absolute: magnifierContainerPosition,
+  pointer,
+  anchor: {
+    x: computed(() => anchor.x),
+    y: computed(() => anchor.y),
+    width: computed(() => props.anchor === 'pointer' ? 0 : anchorWidth.value),
+    height: computed(() => props.anchor === 'pointer' ? 0 : anchorHeight.value)
+  },
+  offset: computedOffset,
+  size: computedSize,
+  containerSize,
+  areaSize: magnifierAreaSize
+}) satisfies Reactive<MagnifuerState>
 </script>
 
 <style scoped lang="scss">
