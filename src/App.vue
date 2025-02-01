@@ -13,11 +13,12 @@ import Magnifuer from './components/Magnifuer.vue'
         width: 500
       }"
       :position="{ placement: 'right' }"
+      transition="fade"
     />
   </main>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 main {
   position: absolute;
   top: 50%;
@@ -25,7 +26,16 @@ main {
   transform: translate(-50%, -50%);
 }
 
-:global(.magnifier) {
+.magnifier {
   border: 2px solid #000;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

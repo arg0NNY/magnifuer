@@ -41,23 +41,27 @@
     :to="teleport === false ? 'body' : teleport"
     :disabled="teleport === false"
   >
-    <div
-      v-if="magnifier.active"
-      ref="magnifierRef"
-      class="magnifuer__magnifier"
-      :class="magnifierClass"
-      :style="{
-        ...magnifierStyles,
-        width: px(computedSize.width),
-        height: px(computedSize.height),
-        zIndex
-      }"
+    <Transition
+      :name="typeof transition === 'string' ? transition : undefined"
+      v-bind="typeof transition === 'object' ? transition : {}"
     >
       <div
-        ref="contentRef"
-        class="magnifuer__content"
-        :class="contentClass"
+        v-if="magnifier.active"
+        ref="magnifierRef"
+        class="magnifuer__magnifier"
+        :class="magnifierClass"
         :style="{
+          ...magnifierStyles,
+          width: px(computedSize.width),
+          height: px(computedSize.height),
+          zIndex
+        }"
+      >
+        <div
+          ref="contentRef"
+          class="magnifuer__content"
+          :class="contentClass"
+          :style="{
           width: px(containerSize.width),
           height: px(containerSize.height),
           transform: [
@@ -65,26 +69,27 @@
             `translate(${-magnifier.x * 100}%, ${-magnifier.y * 100}%)`
           ].join(' ')
         }"
-      >
-        <slot
-          name="magnifier"
-          :size="containerSize"
         >
-          <slot :size="containerSize">
-            <img
-              v-if="img"
-              v-bind="img"
-              :src="computedSrc.magnifier"
-            >
+          <slot
+            name="magnifier"
+            :size="containerSize"
+          >
+            <slot :size="containerSize">
+              <img
+                v-if="img"
+                v-bind="img"
+                :src="computedSrc.magnifier"
+              >
+            </slot>
           </slot>
-        </slot>
+        </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, type HTMLAttributes, type ImgHTMLAttributes, reactive, ref } from 'vue'
+import { computed, type HTMLAttributes, type ImgHTMLAttributes, reactive, ref, type TransitionProps } from 'vue'
 import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import px from '@/utils/px'
@@ -184,6 +189,7 @@ export interface MagnifuerProps {
    * @see https://vuejs.org/guide/built-ins/teleport.html
    */
   teleport?: string | HTMLElement | false
+  transition?: string | TransitionProps
   /**
    * Z-index for the magnifier
    *
