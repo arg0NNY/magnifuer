@@ -14,6 +14,7 @@ import Magnifuer from './components/Magnifuer.vue'
       }"
       :position="{ placement: 'right' }"
       transition="fade"
+      border-radius="50%"
     />
   </main>
 </template>

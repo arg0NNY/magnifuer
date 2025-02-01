@@ -33,6 +33,7 @@
         <div
           class="magnifuer__area"
           :class="areaClass"
+          :style="{ borderRadius }"
         />
       </slot>
     </div>
@@ -55,7 +56,8 @@
           ...magnifierStyles,
           width: px(computedSize.width),
           height: px(computedSize.height),
-          zIndex
+          zIndex,
+          borderRadius
         }"
       >
         <div
@@ -212,6 +214,7 @@ export interface MagnifuerProps {
    */
   disabled?: boolean
   cursor?: CSSProperties['cursor']
+  borderRadius?: string | number
   allowOverflow?: boolean
   area?: boolean
   areaClass?: HTMLAttributes['class']
