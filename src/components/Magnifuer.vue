@@ -3,8 +3,8 @@
     ref="containerRef"
     class="magnifuer"
     :style="{ cursor }"
-    @wheel="controllable && !disabled && onWheel($event)"
     v-bind="$attrs"
+    @wheel="controllable && !disabled && onWheel($event)"
   >
     <slot
       :state="state"
@@ -68,13 +68,13 @@
           class="magnifuer__content"
           :class="contentClass"
           :style="{
-          width: px(state.containerSize.width),
-          height: px(state.containerSize.height),
-          transform: [
-            `scale(${scale})`,
-            `translate(${-state.x * 100}%, ${-state.y * 100}%)`
-          ].join(' ')
-        }"
+            width: px(state.containerSize.width),
+            height: px(state.containerSize.height),
+            transform: [
+              `scale(${scale})`,
+              `translate(${-state.x * 100}%, ${-state.y * 100}%)`
+            ].join(' ')
+          }"
         >
           <slot
             name="magnifier"
@@ -175,9 +175,11 @@ const computedPosition = computed<MagnifuerPosition>(() => {
 
 const computedOffset = computed(() => {
   if (!props.offset) return undefined
-  if (typeof props.offset === 'object') return {
-    x: px(props.offset.x),
-    y: px(props.offset.y)
+  if (typeof props.offset === 'object') {
+    return {
+      x: px(props.offset.x),
+      y: px(props.offset.y)
+    }
   }
   return {
     x: px(props.offset),
@@ -209,14 +211,16 @@ const magnifierStyles = computed(() => {
     ? `translate(${computedOffset.value.x}, ${computedOffset.value.y})`
     : ''
 
-  if (props.transform) return {
-    position: 'absolute' as const,
-    top: '0',
-    left: '0',
-    transform: [
-      offsetTransform,
+  if (props.transform) {
+    return {
+      position: 'absolute' as const,
+      top: '0',
+      left: '0',
+      transform: [
+        offsetTransform,
       `translate(${position.x}, ${position.y})`
-    ].filter(Boolean).join(' ')
+      ].filter(Boolean).join(' ')
+    }
   }
 
   return {

@@ -8,5 +8,10 @@ export default defineConfigWithVueTs(
   standard,
   {
     ignores: ['dist']
+  },
+  {
+    rules: {
+      'vue/multi-word-component-names': 'off'
+    }
   }
 )

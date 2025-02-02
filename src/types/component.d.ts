@@ -2,7 +2,7 @@ import type { CSSProperties, HTMLAttributes, ImgHTMLAttributes, TransitionProps 
 import type { UseFloatingOptions } from '@floating-ui/vue'
 import type { UseMagnifuerState } from '@/composables/useMagnifuer'
 import type { MagnifuerPosition, MagnifuerSize, OptionsToProp } from '@/types'
-import { UseMagnifuerScaleOptions } from '@/composables/useMagnifuerScale'
+import type { UseMagnifuerScaleOptions } from '@/composables/useMagnifuerScale'
 
 export interface MagnifuerState extends UseMagnifuerState {
   active: boolean
@@ -23,33 +23,6 @@ export interface MagnifuerImgSrc {
 export interface MagnifuerImg extends Omit<ImgHTMLAttributes, 'src'> {
   src: string | MagnifuerImgSrc
 }
-
-// export interface MagnifuerControllableOptions {
-//   /**
-//    * Minimal scale value
-//    *
-//    * @default 1
-//    */
-//   min?: number
-//   /**
-//    * Maximal scale value
-//    *
-//    * @default 10
-//    */
-//   max?: number
-//   /**
-//    * Speed for the default scale step function
-//    *
-//    * @default 1.3
-//    */
-//   speed?: number
-//   /**
-//    * Step for scale value
-//    *
-//    * @default (current, direction) => current * Math.pow(speed, direction)
-//    */
-//   step?: number | ((current: number, direction: number) => number)
-// }
 
 export interface MagnifuerOffset {
   x: number | string
@@ -125,9 +98,9 @@ export interface MagnifuerProps {
   contentClass?: HTMLAttributes['class']
 }
 
-export type MagnifuerBaseSlot = (props: { state: MagnifuerState }) => any
+export type MagnifuerBaseSlot = (props: { state: MagnifuerState }) => unknown
 export interface MagnifuerSlots {
-  default?: (props: { state: MagnifuerState, isMagnifier: boolean }) => any
+  default?: (props: { state: MagnifuerState, isMagnifier: boolean }) => unknown
   magnifier?: MagnifuerBaseSlot
   area?: MagnifuerBaseSlot
 }

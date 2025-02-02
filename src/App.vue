@@ -5,19 +5,35 @@ import type { Placement } from '@floating-ui/vue'
 
 const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
 
+const showState = ref(false)
+
 const minScale = ref(1)
 const placement = ref<Placement>('right')
 </script>
 
 <template>
-  <pre v-if="false">{{ magnifuerRef?.state }}</pre>
+  <button @click="showState = !showState">
+    Toggle state
+  </button>
+  <pre v-if="showState">{{ magnifuerRef?.state }}</pre>
   <select v-model="placement">
-    <option value="top">top</option>
-    <option value="right">right</option>
-    <option value="bottom">bottom</option>
-    <option value="left">left</option>
+    <option value="top">
+      top
+    </option>
+    <option value="right">
+      right
+    </option>
+    <option value="bottom">
+      bottom
+    </option>
+    <option value="left">
+      left
+    </option>
   </select>
-  <input type="number" v-model="minScale">
+  <input
+    v-model="minScale"
+    type="number"
+  >
   <main>
     <Magnifuer
       ref="magnifuerRef"

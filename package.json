@@ -26,7 +26,8 @@
     "build": "vite build",
     "typecheck": "vue-tsc --noEmit",
     "release": "pnpm build && release-it",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",

@@ -50,9 +50,13 @@ function useMagnifuerScale (
 
   const safeScale = computed({
     get: () => secureScale(scale.value),
-    set: value => scale.value = secureScale(value)
+    set: value => {
+      scale.value = secureScale(value)
+    }
   })
-  watch([min, max], () => scale.value = safeScale.value)
+  watch([min, max], () => {
+    scale.value = safeScale.value
+  })
 
   function alter (value: number): void {
     const speed = toValue(options.speed) ?? 1.3
