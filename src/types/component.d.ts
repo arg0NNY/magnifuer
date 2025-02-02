@@ -1,7 +1,8 @@
 import type { CSSProperties, HTMLAttributes, ImgHTMLAttributes, TransitionProps } from 'vue'
-import type { MaybeReadonlyRefOrGetter, UseFloatingOptions } from '@floating-ui/vue'
+import type { UseFloatingOptions } from '@floating-ui/vue'
 import type { UseMagnifuerState } from '@/composables/useMagnifuer'
-import type { MagnifuerPosition, MagnifuerSize } from '@/types'
+import type { MagnifuerPosition, MagnifuerSize, OptionsToProp } from '@/types'
+import { UseMagnifuerScaleOptions } from '@/composables/useMagnifuerScale'
 
 export interface MagnifuerState extends UseMagnifuerState {
   active: boolean
@@ -23,41 +24,36 @@ export interface MagnifuerImg extends Omit<ImgHTMLAttributes, 'src'> {
   src: string | MagnifuerImgSrc
 }
 
-export interface MagnifuerControllableOptions {
-  /**
-   * Minimal scale value
-   *
-   * @default 1
-   */
-  min?: number
-  /**
-   * Maximal scale value
-   *
-   * @default 10
-   */
-  max?: number
-  /**
-   * Speed for the default scale step function
-   *
-   * @default 1.3
-   */
-  speed?: number
-  /**
-   * Step for scale value
-   *
-   * @default (current, direction) => current * Math.pow(speed, direction)
-   */
-  step?: number | ((current: number, direction: number) => number)
-}
+// export interface MagnifuerControllableOptions {
+//   /**
+//    * Minimal scale value
+//    *
+//    * @default 1
+//    */
+//   min?: number
+//   /**
+//    * Maximal scale value
+//    *
+//    * @default 10
+//    */
+//   max?: number
+//   /**
+//    * Speed for the default scale step function
+//    *
+//    * @default 1.3
+//    */
+//   speed?: number
+//   /**
+//    * Step for scale value
+//    *
+//    * @default (current, direction) => current * Math.pow(speed, direction)
+//    */
+//   step?: number | ((current: number, direction: number) => number)
+// }
 
 export interface MagnifuerOffset {
   x: number | string
   y: number | string
-}
-
-type ToValue<T> = T extends MaybeReadonlyRefOrGetter<infer U> ? U : T
-export type MagnifuerFloatingOptions = {
-  [key in keyof UseFloatingOptions<HTMLElement>]: ToValue<UseFloatingOptions<HTMLElement>[key]>
 }
 
 export interface MagnifuerProps {
@@ -66,7 +62,7 @@ export interface MagnifuerProps {
    *
    * @default false
    */
-  controllable?: boolean | MagnifuerControllableOptions
+  controllable?: boolean | OptionsToProp<UseMagnifuerScaleOptions>
   /**
    * Use images for default and magnifier slots
    */
@@ -89,7 +85,7 @@ export interface MagnifuerProps {
   position?: 'anchor' | MagnifuerPosition
   transform?: boolean
   offset?: number | string | MagnifuerOffset
-  floating?: MagnifuerFloatingOptions
+  floating?: OptionsToProp<UseFloatingOptions<HTMLElement>>
   /**
    * Size of the magnifier
    *

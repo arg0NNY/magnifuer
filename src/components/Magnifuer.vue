@@ -3,7 +3,7 @@
     ref="containerRef"
     class="magnifuer"
     :style="{ cursor }"
-    @wheel="onWheel"
+    @wheel="controllable && !disabled && onWheel($event)"
     v-bind="$attrs"
   >
     <slot
@@ -98,13 +98,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRef } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useFloating } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import type { MagnifuerPosition } from '@/types'
 import type { MagnifuerProps, MagnifuerSlots, MagnifuerState } from '@/types/component'
 import useMagnifuer from '@/composables/useMagnifuer'
 import px from '@/utils/px'
+import useMagnifuerScale from '@/composables/useMagnifuerScale'
 
 const props = withDefaults(
   defineProps<MagnifuerProps>(),
@@ -125,34 +126,14 @@ const props = withDefaults(
 defineSlots<MagnifuerSlots>()
 
 const scale = defineModel<number>('scale', { required: true })
-function alterScale (value: number): void {
-  if (props.controllable === false) return
 
-  const {
-    min = 1,
-    max = 10,
-    speed = 1.3,
-    step = (current: number, direction: number) => current * Math.pow(speed, direction)
-  } = typeof props.controllable === 'object' ? props.controllable : {}
-
-  scale.value = Math.max(
-    1,
-    min,
-    Math.min(
-      max,
-      typeof step === 'function'
-        ? step(scale.value, value)
-        : (scale.value + value * step)
-    )
-  )
-}
-function onWheel (event: WheelEvent): void {
-  if (props.controllable === false || props.disabled) return
-
-  alterScale(event.deltaY > 0 ? -1 : 1)
-  event.preventDefault()
-  event.stopPropagation()
-}
+const scaleOptions = computed(() => typeof props.controllable === 'object' ? props.controllable : {})
+const { onWheel } = useMagnifuerScale(scale, {
+  min: () => scaleOptions.value.min,
+  max: () => scaleOptions.value.max,
+  speed: () => scaleOptions.value.speed,
+  step: scaleOptions.value.step
+})
 
 const containerRef = ref<HTMLElement>()
 const magnifierRef = ref<HTMLElement>()
@@ -209,11 +190,11 @@ const { floatingStyles } = useFloating(
   computedAnchor,
   magnifierRef,
   {
-    open: toRef(props.floating, 'open'),
-    placement: toRef(props.floating, 'placement'),
-    strategy: toRef(props.floating, 'strategy'),
-    middleware: toRef(props.floating, 'middleware'),
-    transform: toRef(props.floating, 'transform'),
+    open: () => props.floating?.open,
+    placement: () => props.floating?.placement,
+    strategy: () => props.floating?.strategy,
+    middleware: () => props.floating?.middleware,
+    transform: () => props.floating?.transform,
     whileElementsMounted: props.floating?.whileElementsMounted
   }
 )

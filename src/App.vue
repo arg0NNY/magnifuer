@@ -1,23 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Magnifuer from './components/Magnifuer.vue'
+import type { Placement } from '@floating-ui/vue'
 
 const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
+
+const minScale = ref(1)
+const placement = ref<Placement>('right')
 </script>
 
 <template>
   <pre v-if="false">{{ magnifuerRef?.state }}</pre>
+  <select v-model="placement">
+    <option value="top">top</option>
+    <option value="right">right</option>
+    <option value="bottom">bottom</option>
+    <option value="left">left</option>
+  </select>
+  <input type="number" v-model="minScale">
   <main>
     <Magnifuer
       ref="magnifuerRef"
       magnifier-class="magnifier"
       :scale="3"
-      controllable
+      :controllable="{ min: minScale }"
       :img="{
         src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
         width: 500
       }"
-      :floating="{ placement: 'right' }"
+      :floating="{ placement }"
       transition="fade"
     />
   </main>
