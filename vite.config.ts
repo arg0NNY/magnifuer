@@ -40,7 +40,8 @@ export default defineConfig({
           vue: 'Vue',
           '@vueuse/core': 'VueUse',
           '@floating-ui/vue': 'FloatingUIVue'
-        }
+        },
+        exports: 'named'
       }
     }
   }
