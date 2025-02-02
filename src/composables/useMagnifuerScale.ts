@@ -14,7 +14,7 @@ export interface UseMagnifuerScaleOptions {
    */
   max?: MaybeRefOrGetter<number | undefined>
   /**
-   * Speed for the default scale step function
+   * Speed value for the default scale step function
    *
    * @default 1.3
    */
@@ -22,20 +22,44 @@ export interface UseMagnifuerScaleOptions {
   /**
    * Scale computation function on step
    *
+   * @param current Current scale
+   * @param direction Step direction (±1)
+   * @returns The new scale value
    * @default (current, direction) => current * Math.pow(speed, direction)
    */
   step?: (current: number, direction: number) => number
 }
 
 export interface UseMagnifuerScaleReturn {
+  /**
+   * Safe-guarded scale guaranteed to be within limits
+   */
   scale: Ref<number>
+  /**
+   * Alter the scale
+   *
+   * @param value Altering direction (±1)
+   */
   alter: (value: number) => void
+  /**
+   * Callback for the `wheel` event which automatically triggers the altering
+   * and blocks native scrolling
+   *
+   * @param event
+   */
   onWheel: (event: WheelEvent) => void
 }
 
+/**
+ * Utility composable for controlling the scale value of a magnifier.
+ * Keeps the scale within limits and provides callbacks to alter it.
+ *
+ * @param scale Raw scale value
+ * @param options Additional options
+ */
 function useMagnifuerScale (
   scale: Ref<number>,
-  options: UseMagnifuerScaleOptions
+  options: UseMagnifuerScaleOptions = {}
 ): UseMagnifuerScaleReturn {
   const min = computed(() => toValue(options.min) ?? 1)
   const max = computed(() => toValue(options.max) ?? 10)

@@ -1,25 +1,76 @@
 import { computed, type MaybeRefOrGetter, reactive, Reactive, Ref, toRef } from 'vue'
 import { type MaybeElementRef, useMouseInElement } from '@vueuse/core'
-import type { MagnifuerPosition, MagnifuerSize, MagnifuerPointer } from '@/types'
+import type { MagnifuerPosition, MagnifuerSize } from '@/types'
 
 export interface UseMagnifuerOptions {
+  /**
+   * Allow the magnifying area to overflow the container
+   *
+   * @default false
+   */
   allowOverflow?: MaybeRefOrGetter<boolean>
 }
 
-export interface UseMagnifuerState extends MagnifuerPosition {
-  scale: number
+export interface MagnifuerPointer extends MagnifuerPosition {
+  /**
+   * Absolute position of the pointer in px
+   */
   absolute: MagnifuerPosition
+  /**
+   * Whether the pointer is outside the container
+   */
+  isOutside: boolean
+}
+
+export interface UseMagnifuerState {
+  /**
+   * Current scale value
+   */
+  scale: number
+  /**
+   * Current position of the magnifier on X axis relative to container width as a fractional value (0-1)
+   */
+  x: number
+  /**
+   * Current position of the magnifier on Y axis relative to container height as a fractional value (0-1)
+   */
+  y: number
+  /**
+   * Absolute position of the magnifier relative to the container in px
+   */
+  absolute: MagnifuerPosition
+  /**
+   * Pointer state relative to the container
+   */
   pointer: MagnifuerPointer
+  /**
+   * Size of the magnifier in px
+   */
   size: MagnifuerSize
+  /**
+   * Size of the container in px
+   */
   containerSize: MagnifuerSize
+  /**
+   * Size of the magnifying area in px
+   */
   areaSize: MagnifuerSize
 }
 
+/**
+ * Utility composable for making custom magnifying-glass-style component.
+ * Provides all the essential calculations updated in real-time for positioning the elements.
+ *
+ * @param container Reference to the container element whose content is to be magnified
+ * @param scale Scale value
+ * @param size Size of the magnifier in px
+ * @param options Additional options
+ */
 function useMagnifuer (
   container: MaybeElementRef,
   scale: MaybeRefOrGetter<number>,
   size: MagnifuerSize<MaybeRefOrGetter<number>>,
-  options?: UseMagnifuerOptions
+  options: UseMagnifuerOptions = {}
 ): Reactive<UseMagnifuerState> {
   const currentScale: Ref<number> = toRef(scale)
   const computedSize = reactive({
