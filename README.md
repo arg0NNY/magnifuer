@@ -1,7 +1,12 @@
+> [!WARNING]
+> This library is still in development and is not usable yet.
+
 # 🔍 Magnifuer
 
 Feature-rich Vue component and tooling for creating customizable magnifying-glass-style interfaces
-with ease
+with ease.
+
+-- IMAGE HERE --
 
 ## 🚀 Features
 
@@ -48,6 +53,7 @@ npm i magnifuer
       src: '/path/to/image',
       width: 500
     }"
+    :size="100"
     anchor="pointer"
     offset="-50%"
     border-radius="50%"
