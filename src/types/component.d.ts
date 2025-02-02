@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ImgHTMLAttributes, TransitionProps } from 'vue'
-import type { UseFloatingOptions } from '@floating-ui/vue'
+import type { MaybeReadonlyRefOrGetter, UseFloatingOptions } from '@floating-ui/vue'
 import type { UseMagnifuerState } from '@/composables/useMagnifuer'
 import type { MagnifuerPosition, MagnifuerSize } from '@/types'
 
@@ -55,6 +55,11 @@ export interface MagnifuerOffset {
   y: number | string
 }
 
+type ToValue<T> = T extends MaybeReadonlyRefOrGetter<infer U> ? U : T
+export type MagnifuerFloatingOptions = {
+  [key in keyof UseFloatingOptions<HTMLElement>]: ToValue<UseFloatingOptions<HTMLElement>[key]>
+}
+
 export interface MagnifuerProps {
   /**
    * Allow user to control magnifier scale using the mouse wheel
@@ -81,9 +86,10 @@ export interface MagnifuerProps {
    *
    * @default 'anchor'
    */
-  position?: 'anchor' | MagnifuerPosition | UseFloatingOptions<HTMLElement>
+  position?: 'anchor' | MagnifuerPosition
   transform?: boolean
   offset?: number | string | MagnifuerOffset
+  floating?: MagnifuerFloatingOptions
   /**
    * Size of the magnifier
    *

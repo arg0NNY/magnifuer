@@ -98,8 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, } from 'vue'
-import { useFloating, type UseFloatingOptions } from '@floating-ui/vue'
+import { computed, reactive, ref, toRef } from 'vue'
+import { useFloating } from '@floating-ui/vue'
 import { useMouseInElement } from '@vueuse/core'
 import type { MagnifuerPosition } from '@/types'
 import type { MagnifuerProps, MagnifuerSlots, MagnifuerState } from '@/types/component'
@@ -110,11 +110,10 @@ const props = withDefaults(
   defineProps<MagnifuerProps>(),
   {
     controllable: false,
-    img: undefined,
     anchor: 'self',
     position: 'anchor',
     transform: true,
-    offset: undefined,
+    floating: () => ({}),
     size: 'anchor',
     teleport: 'body',
     zIndex: 1000,
@@ -189,6 +188,11 @@ const computedSrc = reactive({
   magnifier: computed(() => getSrc(true))
 })
 
+const computedPosition = computed<MagnifuerPosition>(() => {
+  if (props.position === 'anchor') return anchor
+  return props.position
+})
+
 const computedOffset = computed(() => {
   if (!props.offset) return undefined
   if (typeof props.offset === 'object') return {
@@ -201,28 +205,24 @@ const computedOffset = computed(() => {
   }
 })
 
-const computedPosition = computed<MagnifuerPosition | UseFloatingOptions<HTMLElement>>(() => {
-  if (props.position === 'anchor') return anchor
-  return props.position
-})
-function isAbsolute (position: MagnifuerPosition | UseFloatingOptions<HTMLElement>): position is MagnifuerPosition {
-  return 'x' in position
-}
-function isFloating (position: MagnifuerPosition | UseFloatingOptions<HTMLElement>): position is UseFloatingOptions {
-  return !isAbsolute(position)
-}
-const isPositionFloating = computed(() => isFloating(computedPosition.value))
 const { floatingStyles } = useFloating(
   computedAnchor,
   magnifierRef,
-  isFloating(computedPosition.value) ? computedPosition.value : undefined
+  {
+    open: toRef(props.floating, 'open'),
+    placement: toRef(props.floating, 'placement'),
+    strategy: toRef(props.floating, 'strategy'),
+    middleware: toRef(props.floating, 'middleware'),
+    transform: toRef(props.floating, 'transform'),
+    whileElementsMounted: props.floating?.whileElementsMounted
+  }
 )
 const magnifierStyles = computed(() => {
-  if (isPositionFloating.value) return floatingStyles.value
+  if (props.floating) return floatingStyles.value
 
   const position = {
-    x: isAbsolute(computedPosition.value) ? px(computedPosition.value.x) : '',
-    y: isAbsolute(computedPosition.value) ? px(computedPosition.value.y) : ''
+    x: px(computedPosition.value.x),
+    y: px(computedPosition.value.y)
   }
 
   const offsetTransform = computedOffset.value

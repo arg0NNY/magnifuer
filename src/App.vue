@@ -17,7 +17,7 @@ const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
         src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
         width: 500
       }"
-      :position="{ placement: 'right' }"
+      :floating="{ placement: 'right' }"
       transition="fade"
     />
   </main>
