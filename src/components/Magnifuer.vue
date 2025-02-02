@@ -114,7 +114,6 @@ const props = withDefaults(
     anchor: 'self',
     position: 'anchor',
     transform: true,
-    floating: () => ({}),
     size: 'anchor',
     teleport: 'body',
     zIndex: 1000,
