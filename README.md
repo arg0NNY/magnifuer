@@ -3,8 +3,6 @@
 Feature-rich Vue component and tooling for creating customizable magnifying-glass-style interfaces
 with ease.
 
--- IMAGE HERE --
-
 ## 🚀 Features
 
 - ✨ **Magnify anything** — not restricted to images
