@@ -7,6 +7,11 @@
       "preset": "angular",
       "infile": "CHANGELOG.md",
       "ignoreRecommendedBump": true
-    }
+    },
+    "release-it-pnpm": {}
+  },
+  "hooks": {
+    "before:init": ["pnpm run lint", "pnpm run typecheck"],
+    "after:bump": ["pnpm run build", "pnpm run readme"]
   }
 }
