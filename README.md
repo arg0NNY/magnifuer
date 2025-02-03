@@ -406,8 +406,7 @@ how to use the values provided by `useMagnifuer`.
 
 <!-- SOURCE dist/composables/useMagnifuer.d.ts -->
 ```ts
-import { MaybeRefOrGetter, Reactive } from 'vue';
-import { MaybeElementRef } from '@vueuse/core';
+import { MaybeRef, MaybeRefOrGetter, Reactive } from 'vue';
 import { MagnifuerPosition, MagnifuerSize } from '../types';
 export interface UseMagnifuerOptions {
     /**
@@ -423,9 +422,9 @@ export interface MagnifuerPointer extends MagnifuerPosition {
      */
     absolute: MagnifuerPosition;
     /**
-     * Whether the pointer is outside the container
+     * Whether the pointer is inside the container
      */
-    isOutside: boolean;
+    isInside: boolean;
 }
 export interface UseMagnifuerState {
     /**
@@ -463,14 +462,14 @@ export interface UseMagnifuerState {
 }
 /**
  * Utility composable for making custom magnifying-glass-style component.
- * Provides all the essential calculations for positioning the elements updated in real-time.
+ * Provides all the essential calculations updated in real-time for positioning the elements.
  *
- * @param container Reference to the container element containing the content to be magnified
+ * @param container Reference to the container element whose content is to be magnified
  * @param scale Scale value
  * @param size Size of the magnifier in px
  * @param options Additional options
  */
-declare function useMagnifuer(container: MaybeElementRef, scale: MaybeRefOrGetter<number>, size: MagnifuerSize<MaybeRefOrGetter<number>>, options?: UseMagnifuerOptions): Reactive<UseMagnifuerState>;
+declare function useMagnifuer(container: MaybeRef<HTMLElement | null | undefined>, scale: MaybeRefOrGetter<number>, size: MagnifuerSize<MaybeRefOrGetter<number>>, options?: UseMagnifuerOptions): Reactive<UseMagnifuerState>;
 export default useMagnifuer;
 
 ```
