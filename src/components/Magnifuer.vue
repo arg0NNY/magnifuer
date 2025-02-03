@@ -291,6 +291,7 @@ defineExpose({ state })
     height: 100%;
     background-color: rgba(255, 255, 255, .6);
     border: 1px solid #CCCBCC;
+    box-sizing: border-box;
   }
 
   &__magnifier {
