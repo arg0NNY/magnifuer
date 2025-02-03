@@ -1,6 +1,3 @@
-> [!WARNING]
-> This library is still in development and is not usable yet.
-
 # 🔍 Magnifuer
 
 Feature-rich Vue component and tooling for creating customizable magnifying-glass-style interfaces
@@ -16,11 +13,17 @@ with ease.
 - 🛠️ **Tooling** — provides utilities to create your own magnifier components
 - 🛡️ **Type-safe** and ⚡ **SSR-friendly**
 
+## 🕹️ [Demo ↯](https://arg0nny.github.io/magnifuer/)
 
 ## 📦 Install
 
 ```bash
 npm i magnifuer
+```
+
+Optionally install [🎈 Floating UI](https://floating-ui.com/) if you plan to use smart positioning:
+```bash
+npm i @floating-ui/vue
 ```
 
 ## 🎯 Quick start
