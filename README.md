@@ -575,3 +575,42 @@ export default useMagnifuerScale;
 ```
 <!-- SOURCE END -->
 </details>
+
+### Utility types
+
+Miscellaneous types used across the package.
+
+#### Type Declarations:
+
+<details>
+<summary>Show Type Declarations</summary>
+
+<!-- SOURCE dist/types/index.d.ts -->
+```ts
+import { MaybeRefOrGetter } from 'vue';
+import { MaybeReadonlyRefOrGetter } from '@floating-ui/vue';
+
+
+export type ToValue<T> = T extends MaybeReadonlyRefOrGetter<infer U>
+  ? U
+  : T extends MaybeRefOrGetter<infer U>
+    ? U
+    : T
+
+export type OptionsToProp<T> = {
+  [key in keyof T]: ToValue<T[key]>
+}
+
+export interface MagnifuerPosition<T = number> {
+  x: T
+  y: T
+}
+
+export interface MagnifuerSize<T = number> {
+  width: T
+  height: T
+}
+
+```
+<!-- SOURCE END -->
+</details>
