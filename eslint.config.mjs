@@ -7,7 +7,10 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
   standard,
   {
-    ignores: ['dist']
+    ignores: [
+      'dist',
+      'example'
+    ]
   },
   {
     rules: {
