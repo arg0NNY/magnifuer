@@ -354,7 +354,7 @@ Provides all the essential calculations updated in real-time for positioning the
   </div>
 
   <div
-    v-if="state.active"
+    v-if="!state.pointer.isOutside"
     id="magnifier"
     :style="{
       width: state.size.width + 'px',
