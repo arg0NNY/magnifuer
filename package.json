@@ -28,7 +28,8 @@
     "release": "pnpm build && release-it",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "readme": "node scripts/readme.js"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",

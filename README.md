@@ -121,7 +121,15 @@ import 'magnifuer/style.css' // Can be imported only once in `main.ts`
 <details>
 <summary>Show Type Declarations</summary>
 
+<!-- SOURCE dist/types/component.d.ts -->
 ```ts
+import { CSSProperties, HTMLAttributes, ImgHTMLAttributes, TransitionProps } from 'vue';
+import { UseFloatingOptions } from '@floating-ui/vue';
+import { UseMagnifuerState } from '../composables/useMagnifuer';
+import { MagnifuerPosition, MagnifuerSize, OptionsToProp } from '.';
+import { UseMagnifuerScaleOptions } from '../composables/useMagnifuerScale';
+
+
 export interface MagnifuerState extends UseMagnifuerState {
   /**
    * Whether the magnifier is currently active
@@ -314,7 +322,9 @@ export interface MagnifuerSlots {
    */
   area?: MagnifuerBaseSlot
 }
+
 ```
+<!-- SOURCE END -->
 </details>
 
 ### `useMagnifuer`
@@ -389,78 +399,77 @@ how to use the values provided by `useMagnifuer`.
 <details>
 <summary>Show Type Declarations</summary>
 
+<!-- SOURCE dist/composables/useMagnifuer.d.ts -->
 ```ts
+import { MaybeRefOrGetter, Reactive } from 'vue';
+import { MaybeElementRef } from '@vueuse/core';
+import { MagnifuerPosition, MagnifuerSize } from '../types';
 export interface UseMagnifuerOptions {
-  /**
-   * Allow the magnifying area to overflow the container
-   *
-   * @default false
-   */
-  allowOverflow?: MaybeRefOrGetter<boolean>
+    /**
+     * Allow the magnifying area to overflow the container
+     *
+     * @default false
+     */
+    allowOverflow?: MaybeRefOrGetter<boolean>;
 }
-
 export interface MagnifuerPointer extends MagnifuerPosition {
-  /**
-   * Absolute position of the pointer in px
-   */
-  absolute: MagnifuerPosition
-  /**
-   * Whether the pointer is outside the container
-   */
-  isOutside: boolean
+    /**
+     * Absolute position of the pointer in px
+     */
+    absolute: MagnifuerPosition;
+    /**
+     * Whether the pointer is outside the container
+     */
+    isOutside: boolean;
 }
-
 export interface UseMagnifuerState {
-  /**
-   * Current scale value
-   */
-  scale: number
-  /**
-   * Current position of the magnifier on X axis relative to container width as a fractional value (0-1)
-   */
-  x: number
-  /**
-   * Current position of the magnifier on Y axis relative to container height as a fractional value (0-1)
-   */
-  y: number
-  /**
-   * Absolute position of the magnifier relative to the container in px
-   */
-  absolute: MagnifuerPosition
-  /**
-   * Pointer state relative to the container
-   */
-  pointer: MagnifuerPointer
-  /**
-   * Size of the magnifier in px
-   */
-  size: MagnifuerSize
-  /**
-   * Size of the container in px
-   */
-  containerSize: MagnifuerSize
-  /**
-   * Size of the magnifying area in px
-   */
-  areaSize: MagnifuerSize
+    /**
+     * Current scale value
+     */
+    scale: number;
+    /**
+     * Current position of the magnifier on X axis relative to container width as a fractional value (0-1)
+     */
+    x: number;
+    /**
+     * Current position of the magnifier on Y axis relative to container height as a fractional value (0-1)
+     */
+    y: number;
+    /**
+     * Absolute position of the magnifier relative to the container in px
+     */
+    absolute: MagnifuerPosition;
+    /**
+     * Pointer state relative to the container
+     */
+    pointer: MagnifuerPointer;
+    /**
+     * Size of the magnifier in px
+     */
+    size: MagnifuerSize;
+    /**
+     * Size of the container in px
+     */
+    containerSize: MagnifuerSize;
+    /**
+     * Size of the magnifying area in px
+     */
+    areaSize: MagnifuerSize;
 }
-
 /**
  * Utility composable for making custom magnifying-glass-style component.
- * Provides all the essential calculations updated in real-time for positioning the elements.
+ * Provides all the essential calculations for positioning the elements updated in real-time.
  *
- * @param container Reference to the container element whose content is to be magnified
+ * @param container Reference to the container element containing the content to be magnified
  * @param scale Scale value
  * @param size Size of the magnifier in px
  * @param options Additional options
  */
-export declare function useMagnifuer (
-  container: MaybeElementRef,
-  scale: MaybeRefOrGetter<number>,
-  size: MagnifuerSize<MaybeRefOrGetter<number>>,
-  options?: UseMagnifuerOptions
-): Reactive<UseMagnifuerState>
+declare function useMagnifuer(container: MaybeElementRef, scale: MaybeRefOrGetter<number>, size: MagnifuerSize<MaybeRefOrGetter<number>>, options?: UseMagnifuerOptions): Reactive<UseMagnifuerState>;
+export default useMagnifuer;
+
 ```
+<!-- SOURCE END -->
 </details>
 
 ### `useMagnifuerScale`
@@ -502,57 +511,57 @@ const { alter, onWheel } = useMagnifuerScale(scale, {
 <details>
 <summary>Show Type Declarations</summary>
 
+<!-- SOURCE dist/composables/useMagnifuerScale.d.ts -->
 ```ts
+import { MaybeRefOrGetter, Ref } from 'vue';
 export interface UseMagnifuerScaleOptions {
-  /**
-   * Minimal scale value
-   *
-   * @default 1
-   */
-  min?: MaybeRefOrGetter<number | undefined>
-  /**
-   * Maximal scale value
-   *
-   * @default 10
-   */
-  max?: MaybeRefOrGetter<number | undefined>
-  /**
-   * Speed value for the default scale step function
-   *
-   * @default 1.3
-   */
-  speed?: MaybeRefOrGetter<number | undefined>
-  /**
-   * Scale computation function on step
-   *
-   * @param current Current scale
-   * @param direction Step direction (±1)
-   * @returns The new scale value
-   * @default (current, direction) => current * Math.pow(speed, direction)
-   */
-  step?: (current: number, direction: number) => number
+    /**
+     * Minimal scale value
+     *
+     * @default 1
+     */
+    min?: MaybeRefOrGetter<number | undefined>;
+    /**
+     * Maximal scale value
+     *
+     * @default 10
+     */
+    max?: MaybeRefOrGetter<number | undefined>;
+    /**
+     * Speed value for the default scale step function
+     *
+     * @default 1.3
+     */
+    speed?: MaybeRefOrGetter<number | undefined>;
+    /**
+     * Scale computation function on step
+     *
+     * @param current Current scale
+     * @param direction Step direction (±1)
+     * @returns The new scale value
+     * @default (current, direction) => current * Math.pow(speed, direction)
+     */
+    step?: (current: number, direction: number) => number;
 }
-
 export interface UseMagnifuerScaleReturn {
-  /**
-   * Safe-guarded scale guaranteed to be within limits
-   */
-  scale: Ref<number>
-  /**
-   * Alter the scale
-   *
-   * @param value Altering direction (±1)
-   */
-  alter: (value: number) => void
-  /**
-   * Callback for the `wheel` event which automatically triggers the altering
-   * and blocks native scrolling
-   *
-   * @param event
-   */
-  onWheel: (event: WheelEvent) => void
+    /**
+     * Safe-guarded scale guaranteed to be within limits
+     */
+    scale: Ref<number>;
+    /**
+     * Alter the scale
+     *
+     * @param value Altering direction (±1)
+     */
+    alter: (value: number) => void;
+    /**
+     * Callback for the `wheel` event which automatically triggers the altering
+     * and blocks native scrolling
+     *
+     * @param event
+     */
+    onWheel: (event: WheelEvent) => void;
 }
-
 /**
  * Utility composable for controlling the scale value of a magnifier.
  * Keeps the scale within limits and provides callbacks to alter it.
@@ -560,9 +569,9 @@ export interface UseMagnifuerScaleReturn {
  * @param scale Raw scale value
  * @param options Additional options
  */
-export declare function useMagnifuerScale (
-  scale: Ref<number>,
-  options?: UseMagnifuerScaleOptions
-): UseMagnifuerScaleReturn
+declare function useMagnifuerScale(scale: Ref<number>, options?: UseMagnifuerScaleOptions): UseMagnifuerScaleReturn;
+export default useMagnifuerScale;
+
 ```
+<!-- SOURCE END -->
 </details>
