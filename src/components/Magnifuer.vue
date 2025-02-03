@@ -40,61 +40,61 @@
         />
       </slot>
     </div>
-  </div>
 
-  <Teleport
-    :to="teleport === false ? 'body' : teleport"
-    :disabled="teleport === false"
-  >
-    <Transition
-      :name="typeof transition === 'string' ? transition : undefined"
-      v-bind="typeof transition === 'object' ? transition : {}"
+    <Teleport
+      :to="teleport === false ? 'parent' : teleport"
+      :disabled="teleport === false"
     >
-      <div
-        v-if="state.active"
-        ref="magnifierRef"
-        class="magnifuer__magnifier"
-        :class="magnifierClass"
-        :style="{
-          ...magnifierStyles,
-          width: px(state.size.width),
-          height: px(state.size.height),
-          zIndex,
-          borderRadius
-        }"
+      <Transition
+        :name="typeof transition === 'string' ? transition : undefined"
+        v-bind="typeof transition === 'object' ? transition : {}"
       >
         <div
-          ref="contentRef"
-          class="magnifuer__content"
-          :class="contentClass"
+          v-if="state.active"
+          ref="magnifierRef"
+          class="magnifuer__magnifier"
+          :class="magnifierClass"
           :style="{
-            width: px(state.containerSize.width),
-            height: px(state.containerSize.height),
-            transform: [
-              `scale(${scale})`,
-              `translate(${-state.x * 100}%, ${-state.y * 100}%)`
-            ].join(' ')
+            ...magnifierStyles,
+            width: px(state.size.width),
+            height: px(state.size.height),
+            zIndex,
+            borderRadius
           }"
         >
-          <slot
-            name="magnifier"
-            :state="state"
+          <div
+            ref="contentRef"
+            class="magnifuer__content"
+            :class="contentClass"
+            :style="{
+              width: px(state.containerSize.width),
+              height: px(state.containerSize.height),
+              transform: [
+                `scale(${scale})`,
+                `translate(${-state.x * 100}%, ${-state.y * 100}%)`
+              ].join(' ')
+            }"
           >
             <slot
+              name="magnifier"
               :state="state"
-              :is-magnifier="true"
             >
-              <img
-                v-if="img"
-                v-bind="img"
-                :src="computedSrc.magnifier"
+              <slot
+                :state="state"
+                :is-magnifier="true"
               >
+                <img
+                  v-if="img"
+                  v-bind="img"
+                  :src="computedSrc.magnifier"
+                >
+              </slot>
             </slot>
-          </slot>
+          </div>
         </div>
-      </div>
-    </Transition>
-  </Teleport>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -137,6 +137,11 @@ const { onWheel } = useMagnifuerScale(scale, {
 const containerRef = ref<HTMLElement>()
 const magnifierRef = ref<HTMLElement>()
 
+const {
+  elementPositionX: containerX,
+  elementPositionY: containerY
+} = useMouseInElement(containerRef)
+
 const computedAnchor = computed(() => {
   if (props.anchor instanceof HTMLElement) return props.anchor
   return containerRef.value
@@ -169,7 +174,12 @@ const computedSrc = reactive({
 })
 
 const computedPosition = computed<MagnifuerPosition>(() => {
-  if (props.position === 'anchor') return anchor
+  if (props.position === 'anchor') {
+    return {
+      x: anchor.x - (props.teleport === false ? containerX.value : 0),
+      y: anchor.y - (props.teleport === false ? containerY.value : 0)
+    }
+  }
   return props.position
 })
 
@@ -218,7 +228,7 @@ const magnifierStyles = computed(() => {
       left: '0',
       transform: [
         offsetTransform,
-      `translate(${position.x}, ${position.y})`
+        `translate(${position.x}, ${position.y})`
       ].filter(Boolean).join(' ')
     }
   }
