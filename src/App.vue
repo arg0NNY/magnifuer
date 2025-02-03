@@ -1,73 +1,110 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import Magnifuer from './components/Magnifuer.vue'
-import type { Placement } from '@floating-ui/vue'
+import { offset } from '@floating-ui/vue'
 
-const magnifuerRef = ref<InstanceType<typeof Magnifuer>>()
-
-const showState = ref(false)
-
-const minScale = ref(1)
-const placement = ref<Placement>('right')
+const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
 </script>
 
 <template>
-  <button @click="showState = !showState">
-    Toggle state
-  </button>
-  <pre v-if="showState">{{ magnifuerRef?.state }}</pre>
-  <select v-model="placement">
-    <option value="top">
-      top
-    </option>
-    <option value="right">
-      right
-    </option>
-    <option value="bottom">
-      bottom
-    </option>
-    <option value="left">
-      left
-    </option>
-  </select>
-  <input
-    v-model="minScale"
-    type="number"
-  >
   <main>
-    <Magnifuer
-      ref="magnifuerRef"
-      magnifier-class="magnifier"
-      :scale="3"
-      :controllable="{ min: minScale }"
-      :img="{
-        src: 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg',
-        width: 500
-      }"
-      :floating="{ placement }"
-      transition="fade"
-    />
+    <div>
+      <h1>🔍 Magnifuer</h1>
+      <p>
+        Feature-rich Vue component and tooling for creating customizable magnifying-glass-style interfaces
+        with ease.
+      </p>
+    </div>
+
+    <div>
+      <h2>📷 Basic image magnifier</h2>
+      <Magnifuer
+        :scale="3"
+        controllable
+        :img="{
+          src,
+          width: 500
+        }"
+      />
+    </div>
+
+    <div>
+      <h2>🔍 Rounded magnifying glass</h2>
+      <Magnifuer
+        :scale="3"
+        :img="{
+          src,
+          width: 500
+        }"
+        :size="150"
+        anchor="pointer"
+        offset="-50%"
+        border-radius="50%"
+        allow-overflow
+      />
+    </div>
+
+    <div>
+      <h2>🎈 Smart positioning with Floating UI</h2>
+      <Magnifuer
+        :scale="3"
+        :img="{
+          src,
+          width: 500
+        }"
+        :floating="{
+          placement: 'right',
+          middleware: [offset(10)]
+        }"
+      />
+    </div>
+
+    <div>
+      <h2>✨ Custom content</h2>
+      <Magnifuer
+        :scale="3"
+        anchor="pointer"
+        :size="{ width: 200, height: 100 }"
+      >
+        <article style="background-color: #fff">
+          <h1>This text will be magnified</h1>
+          <p>
+            Magnifying any content would feel
+            as natural as magnifying the image
+          </p>
+        </article>
+      </Magnifuer>
+    </div>
+
+    <div>
+      <h1>
+        🚀 See documentation on <a href="https://github.com/arg0NNY/magnifuer">GitHub</a>
+      </h1>
+    </div>
   </main>
 </template>
 
 <style lang="scss">
+* {
+  font-family: Roboto, sans-serif;
+}
+
 main {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  padding: 100px 0 200px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 100px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
-.magnifier {
-  box-shadow: 0 0 0 2px #000;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+h1 {
+  text-align: center;
 }
 </style>

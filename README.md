@@ -53,16 +53,16 @@ import { offset } from '@floating-ui/vue'
       src: '/path/to/image',
       width: 500
     }"
-    :size="100"
+    :size="150"
     anchor="pointer"
     offset="-50%"
     border-radius="50%"
+    allow-overflow
   />
 
   <!-- 🎈 Smart positioning with Floating UI -->
   <Magnifuer
     :scale="3"
-    controllable
     :img="{
       src: '/path/to/image',
       width: 500
@@ -79,11 +79,13 @@ import { offset } from '@floating-ui/vue'
     anchor="pointer"
     :size="{ width: 200, height: 100 }"
   >
-    <h1>This text will be magnified</h1>
-    <p>
-      Magnifying any content would feel
-      as natural as magnifying the image
-    </p>
+    <article style="background-color: #fff">
+      <h1>This text will be magnified</h1>
+      <p>
+        Magnifying any content would feel
+        as natural as magnifying the image
+      </p>
+    </article>
   </Magnifuer>
 </template>
 ```
