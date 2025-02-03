@@ -7,7 +7,7 @@
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.mjs",
   "types": "./dist/index.d.ts",
-  "export": {
+  "exports": {
     ".": {
       "import": "./dist/index.es.mjs",
       "require": "./dist/index.umd.js",
