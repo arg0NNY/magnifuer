@@ -1,5 +1,5 @@
-import { computed, type MaybeRefOrGetter, reactive, Reactive, Ref, toRef } from 'vue'
-import { type MaybeElementRef, useMouseInElement } from '@vueuse/core'
+import { computed, type MaybeRef, type MaybeRefOrGetter, reactive, type Reactive, type Ref, toRef } from 'vue'
+import { useElementHover, useMouseInElement } from '@vueuse/core'
 import type { MagnifuerPosition, MagnifuerSize } from '@/types'
 
 export interface UseMagnifuerOptions {
@@ -17,9 +17,9 @@ export interface MagnifuerPointer extends MagnifuerPosition {
    */
   absolute: MagnifuerPosition
   /**
-   * Whether the pointer is outside the container
+   * Whether the pointer is inside the container
    */
-  isOutside: boolean
+  isInside: boolean
 }
 
 export interface UseMagnifuerState {
@@ -67,7 +67,7 @@ export interface UseMagnifuerState {
  * @param options Additional options
  */
 function useMagnifuer (
-  container: MaybeElementRef,
+  container: MaybeRef<HTMLElement | null | undefined>,
   scale: MaybeRefOrGetter<number>,
   size: MagnifuerSize<MaybeRefOrGetter<number>>,
   options: UseMagnifuerOptions = {}
@@ -85,8 +85,7 @@ function useMagnifuer (
     x: pointerAbsoluteX,
     y: pointerAbsoluteY,
     elementWidth: containerWidth,
-    elementHeight: containerHeight,
-    isOutside: isPointerOutside
+    elementHeight: containerHeight
   } = useMouseInElement(container)
   const pointer = reactive({
     x: pointerX,
@@ -95,7 +94,7 @@ function useMagnifuer (
       x: pointerAbsoluteX,
       y: pointerAbsoluteY
     },
-    isOutside: isPointerOutside
+    isInside: useElementHover(container)
   })
   const containerSize = reactive({
     width: containerWidth,

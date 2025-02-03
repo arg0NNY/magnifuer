@@ -250,7 +250,7 @@ const magnifuer = useMagnifuer(
 )
 
 const state = computed<MagnifuerState>(() => ({
-  active: !props.disabled && !magnifuer.pointer.isOutside,
+  active: !props.disabled && magnifuer.pointer.isInside,
   ...magnifuer,
   anchor,
   offset: computedOffset.value
