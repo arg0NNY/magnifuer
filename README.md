@@ -27,11 +27,11 @@ npm i magnifuer
 
 ```vue
 <script setup lang="ts">
-  import { Magnifuer } from 'magnifuer'
-  import 'magnifuer/style.css'
-  
-  // Optional
-  import { offset } from '@floating-ui/vue'
+import { Magnifuer } from 'magnifuer'
+import 'magnifuer/style.css'
+
+// Optional
+import { offset } from '@floating-ui/vue'
 </script>
 
 <template>
@@ -98,15 +98,18 @@ Component providing all the essential needs for magnifying images or other conte
 
 ```vue
 <script setup lang="ts">
-  import { Magnifuer } from 'magnifuer'
-  import 'magnifuer/style.css' // Can be imported only once in `main.ts`
+import { Magnifuer } from 'magnifuer'
+import 'magnifuer/style.css' // Can be imported only once in `main.ts`
 </script>
 
 <template>
   <Magnifuer
     :scale="3"
     :img="{
-      src: '/path/to/image',
+      src: {
+        default: '/path/to/compressed/image',
+        magnifier: '/path/to/original/image'
+      },
       width: 500
     }"
   />
@@ -323,17 +326,17 @@ Provides all the essential calculations updated in real-time for positioning the
 
 ```vue
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useMagnifuer } from 'magnifuer'
+import { ref } from 'vue'
+import { useMagnifuer } from 'magnifuer'
 
-  const containerRef = ref<HTMLElement>()
-  const scale = ref(2)
-  
-  const state = useMagnifuer(
-    containerRef,
-    scale,
-    { width: 200, height: 100 }
-  )
+const containerRef = ref<HTMLElement>()
+const scale = ref(2)
+
+const state = useMagnifuer(
+  containerRef,
+  scale,
+  { width: 200, height: 100 }
+)
 </script>
 
 <template>
@@ -469,16 +472,16 @@ Keeps the scale within limits and provides callbacks to alter it.
 
 ```vue
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useMagnifuerScale } from 'magnifuer'
+import { ref } from 'vue'
+import { useMagnifuerScale } from 'magnifuer'
 
-  const scale = ref(2)
-  
-  const { alter, onWheel } = useMagnifuerScale(scale, {
-    min: 1,
-    max: 10,
-    speed: 1.3
-  })
+const scale = ref(2)
+
+const { alter, onWheel } = useMagnifuerScale(scale, {
+  min: 1,
+  max: 10,
+  speed: 1.3
+})
 </script>
 
 <template>
