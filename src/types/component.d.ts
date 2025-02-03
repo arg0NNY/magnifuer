@@ -81,6 +81,8 @@ export interface MagnifuerProps {
    * Disable to use `top` and `left` properties instead.
    *
    * Applies only when used with {@link MagnifuerProps.position|`position`}.
+   *
+   * @default true
    */
   transform?: boolean
   /**
