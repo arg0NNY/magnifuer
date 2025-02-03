@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Magnifuer } from 'magnifuer'
 import { offset } from '@floating-ui/vue'
+import Image from '@/assets/img.jpg'
 
-const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
+const src = Image
 </script>
 
 <template>
@@ -45,7 +46,12 @@ const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
     </div>
 
     <div>
-      <h2>🎈 Smart positioning with Floating UI</h2>
+      <h2>
+        🎈 Smart positioning with <a
+          href="https://floating-ui.com/"
+          target="_blank"
+        >Floating UI</a>
+      </h2>
       <Magnifuer
         :scale="3"
         :img="{
@@ -65,6 +71,7 @@ const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
         :scale="3"
         anchor="pointer"
         :size="{ width: 200, height: 100 }"
+        :offset="{ x: '-50%', y: 20 }"
       >
         <article style="background-color: #fff">
           <h1>This text will be magnified</h1>

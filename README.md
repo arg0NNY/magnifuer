@@ -79,6 +79,7 @@ import { offset } from '@floating-ui/vue'
     :scale="3"
     anchor="pointer"
     :size="{ width: 200, height: 100 }"
+    :offset="{ x: '-50%', y: 20 }"
   >
     <article style="background-color: #fff">
       <h1>This text will be magnified</h1>
