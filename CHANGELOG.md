@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/arg0NNY/magnifuer/compare/1.0.0...1.0.1) (2025-02-03)
+
+
+### Bug Fixes
+
+* typo in `package.json` ([c5fd4b9](https://github.com/arg0NNY/magnifuer/commit/c5fd4b97045e3f6c87471e92793c67ec1acf8608))
+
 # 1.0.0 (2025-02-03)
 
 
