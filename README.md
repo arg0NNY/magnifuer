@@ -3,6 +3,8 @@
 Feature-rich Vue component and tooling for creating customizable magnifying-glass-style interfaces
 with ease.
 
+## 🕹️ [Demo ↯](https://arg0nny.github.io/magnifuer/)
+
 ## 🚀 Features
 
 - ✨ **Magnify anything** — not restricted to images
@@ -10,8 +12,6 @@ with ease.
 - 🎯 **Smart positioning** — use the full power provided by [🎈 Floating UI](https://floating-ui.com/)
 - 🛠️ **Tooling** — provides utilities to create your own magnifier components
 - 🛡️ **Type-safe** and ⚡ **SSR-friendly**
-
-## 🕹️ [Demo ↯](https://arg0nny.github.io/magnifuer/)
 
 ## 📦 Install
 
