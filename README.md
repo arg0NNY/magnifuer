@@ -57,6 +57,7 @@ import { offset } from '@floating-ui/vue'
     anchor="pointer"
     offset="-50%"
     border-radius="50%"
+    cursor="none"
     allow-overflow
   />
 

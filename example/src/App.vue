@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Magnifuer from './components/Magnifuer.vue'
+import { Magnifuer } from 'magnifuer'
 import { offset } from '@floating-ui/vue'
 
 const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
@@ -39,6 +39,7 @@ const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
         anchor="pointer"
         offset="-50%"
         border-radius="50%"
+        cursor="none"
         allow-overflow
       />
     </div>
@@ -77,7 +78,7 @@ const src = 'http://dummy-images.com/abstract/dummy-2160x2880-Glass.jpg'
 
     <div>
       <h1>
-        🚀 See documentation on <a href="https://github.com/arg0NNY/magnifuer">GitHub</a>
+        🚀 See the documentation on <a href="https://github.com/arg0NNY/magnifuer">GitHub</a>
       </h1>
     </div>
   </main>

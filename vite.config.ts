@@ -9,12 +9,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      copyDtsFiles: true,
-      exclude: [
-        'src/app.ts',
-        'src/App.vue',
-        'src/vite-env.d.ts'
-      ]
+      copyDtsFiles: true
     })
   ],
   resolve: {

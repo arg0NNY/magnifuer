@@ -13,16 +13,13 @@
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
-    "./style.css": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css"
-    }
+    "./style.css": "./dist/style.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build -w",
     "build": "vite build",
     "typecheck": "vue-tsc --noEmit",
     "release": "pnpm build && release-it",
