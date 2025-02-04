@@ -143,7 +143,7 @@ const {
 } = useMouseInElement(containerRef)
 
 const computedAnchor = computed(() => {
-  if (props.anchor instanceof HTMLElement) return props.anchor
+  if (typeof window !== 'undefined' && props.anchor instanceof HTMLElement) return props.anchor
   return containerRef.value
 })
 const {
