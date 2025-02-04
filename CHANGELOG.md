@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/arg0NNY/magnifuer/compare/1.0.1...1.0.2) (2025-02-04)
+
+
+### Bug Fixes
+
+* `HTMLElement` is not defined on server ([2e09431](https://github.com/arg0NNY/magnifuer/commit/2e09431a3357100594a875d7bc45e6e82f836e21))
+* The condition "types" here will never be used as it comes after both "import" and "require" [package.json] ([71bf88f](https://github.com/arg0NNY/magnifuer/commit/71bf88ff07e5916da985f4dda63edd5aa64a75a4))
+
 ## [1.0.1](https://github.com/arg0NNY/magnifuer/compare/1.0.0...1.0.1) (2025-02-03)
 
 
