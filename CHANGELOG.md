@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/arg0NNY/magnifuer/compare/1.0.2...1.0.3) (2025-02-04)
+
+
+### Bug Fixes
+
+* magnifier failed to hydrate properly when teleport is disabled ([6ac7dea](https://github.com/arg0NNY/magnifuer/commit/6ac7dea02ebfc6fd9316d61214fe6d6c4a2ab2e3))
+
 ## [1.0.2](https://github.com/arg0NNY/magnifuer/compare/1.0.1...1.0.2) (2025-02-04)
 
 
