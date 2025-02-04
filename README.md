@@ -374,7 +374,7 @@ const state = useMagnifuer(
   </div>
 
   <div
-    v-if="!state.pointer.isOutside"
+    v-if="state.pointer.isInside"
     id="magnifier"
     :style="{
       width: state.size.width + 'px',
