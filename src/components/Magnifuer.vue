@@ -42,7 +42,7 @@
     </div>
 
     <Teleport
-      :to="teleport === false ? 'parent' : teleport"
+      :to="teleport === false ? undefined : teleport"
       :disabled="teleport === false"
     >
       <Transition
